@@ -14,6 +14,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('register', 'Api\AuthController@register');
+Route::post('login', 'Api\AuthController@login');
+
+// Verify email
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, '__invoke'])
+    ->middleware(['signed', 'throttle:6,1'])
+    ->name('verification.verify');
+
+// Resend link to verify email
+Route::post('/email/verify/resend', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth:api', 'throttle:6,1'])->name('verification.send');
+
+Route::get('/email/verify/success', function () {
+    return view('mail');
+});
+
+Route::group(['middleware'=>'auth:api'],function() { //Routes yang bisa dijalankan setelah login
+    Route::get('logout','Api\AuthController@logout');
 });
