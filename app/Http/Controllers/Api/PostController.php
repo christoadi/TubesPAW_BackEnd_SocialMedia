@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Posting;
 use Illuminate\Http\Request;
+use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
-class PostingController extends Controller
+class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -48,10 +49,10 @@ class PostingController extends Controller
             return response(['message' => $validate->errors()], 400);
         }
 
-        $postings = Posting::create($storeData);
+        $post = Post::create($storeData);
         return response([
-            'message' => 'Create Posting Success',
-            'data' => $postings
+            'message' => 'Create Post Success',
+            'data' => $post
         ], 200);
     }
 
@@ -64,17 +65,62 @@ class PostingController extends Controller
     public function show($id)
     {
         //
-        $postings = Posting::where('user_id', '=', $id)->get();
+        $posts = Post::where('user_id', '=', $id)->get();
 
-        if (!is_null($postings)) {
+        if (!is_null($posts)) {
             return response([
-                'message' => 'Retrieve All Posting Success',
-                'data' => $postings
+                'message' => 'Retrieve All posts Success',
+                'data' => $posts
             ], 200);
         }
 
         return response([
-            'message' => 'Posting not found',
+            'message' => 'posts not found',
+            'data' => null
+        ], 404);
+    }
+
+    public function showAll()
+    {
+        $posts = DB::table('users')
+            ->join('posts', 'users.id', '=', 'posts.user_id')
+            ->select('posts.id AS id', 'post_content', 'user_id', 'name')
+            ->get();
+
+        if (!is_null($posts)) {
+            return response([
+                'message' => 'Retrieve All posts Success',
+                'data' => $posts
+            ], 200);
+        }
+
+        return response([
+            'message' => 'posts not found',
+            'data' => null
+        ], 404);
+    }
+
+    public function showUserPosts($id)
+    {
+        $posts = DB::table('users')
+            ->join('posts', 'users.id', '=', 'posts.user_id')
+            ->select('posts.id AS id', 'post_content', 'user_id', 'name')
+            ->where('user_id', '=', $id)
+            ->get();
+
+//        $userPosts = $posts
+//            ->where('user_id', '=', $id)
+//            ->get();
+
+        if (!is_null($posts)) {
+            return response([
+                'message' => 'Retrieve User posts Success',
+                'data' => $posts
+            ], 200);
+        }
+
+        return response([
+            'message' => 'posts not found',
             'data' => null
         ], 404);
     }
@@ -100,10 +146,10 @@ class PostingController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $postings = Posting::find($id);
-        if (is_null($postings)) {
+        $post = Post::find($id);
+        if (is_null($post)) {
             return response([
-                'message' => 'Posting Not Found',
+                'message' => 'Post Not Found',
                 'data' => null
             ], 404);
         }
@@ -117,12 +163,12 @@ class PostingController extends Controller
             return response(['message' => $validate->errors()], 400);
         }
 
-        $postings->post_content = $updateData['post_content'];
+        $post->post_content = $updateData['post_content'];
 
-        if ($postings->save()) {
+        if ($post->save()) {
             return response([
                 'message' => 'Update post Success',
-                'data' => $postings
+                'data' => $post
             ], 200);
         }
 
@@ -141,24 +187,24 @@ class PostingController extends Controller
     public function destroy($id)
     {
         //
-        $postings = Posting::find($id);
+        $post = Post::find($id);
 
-        if (is_null($postings)) {
+        if (is_null($post)) {
             return response([
-                'message' => 'Posting Not Found',
+                'message' => 'Post Not Found',
                 'data' => null
             ], 404);
         }
 
-        if ($postings->delete()) {
+        if ($post->delete()) {
             return response([
-                'message' => 'Delete Posting Success',
-                'data' => $postings
+                'message' => 'Delete post Success',
+                'data' => $post
             ], 200);
         }
 
         return response([
-            'message' => 'Delete Posting Failed',
+            'message' => 'Delete post Failed',
             'data' => null,
         ], 400);
     }
