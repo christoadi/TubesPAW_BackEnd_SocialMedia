@@ -69,17 +69,18 @@ class PostController extends Controller
 
         if (!is_null($posts)) {
             return response([
-                'message' => 'Retrieve All posts Success',
+                'message' => 'Retrieve All Post Success',
                 'data' => $posts
             ], 200);
         }
 
         return response([
-            'message' => 'posts not found',
+            'message' => 'Post not found',
             'data' => null
         ], 404);
     }
 
+    //Showing all posts on home page
     public function showAll()
     {
         $posts = DB::table('users')
@@ -89,17 +90,18 @@ class PostController extends Controller
 
         if (!is_null($posts)) {
             return response([
-                'message' => 'Retrieve All posts Success',
+                'message' => 'Retrieve All Post Success',
                 'data' => $posts
             ], 200);
         }
 
         return response([
-            'message' => 'posts not found',
+            'message' => 'Post not found',
             'data' => null
         ], 404);
     }
 
+    //Showing logged in user posts on profile
     public function showUserPosts($id)
     {
         $posts = DB::table('users')
@@ -108,19 +110,15 @@ class PostController extends Controller
             ->where('user_id', '=', $id)
             ->get();
 
-//        $userPosts = $posts
-//            ->where('user_id', '=', $id)
-//            ->get();
-
         if (!is_null($posts)) {
             return response([
-                'message' => 'Retrieve User posts Success',
+                'message' => 'Retrieve User Post Success',
                 'data' => $posts
             ], 200);
         }
 
         return response([
-            'message' => 'posts not found',
+            'message' => 'Post not found',
             'data' => null
         ], 404);
     }
@@ -167,13 +165,13 @@ class PostController extends Controller
 
         if ($post->save()) {
             return response([
-                'message' => 'Update post Success',
+                'message' => 'Update Post Success',
                 'data' => $post
             ], 200);
         }
 
         return response([
-            'message' => 'Update post Failed',
+            'message' => 'Update Post Failed',
             'data' => null,
         ], 400);
     }
@@ -187,24 +185,24 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
-        $post = Post::find($id);
+        $posts = Post::find($id);
 
-        if (is_null($post)) {
+        if (is_null($posts)) {
             return response([
                 'message' => 'Post Not Found',
                 'data' => null
             ], 404);
         }
 
-        if ($post->delete()) {
+        if ($posts->delete()) {
             return response([
-                'message' => 'Delete post Success',
-                'data' => $post
+                'message' => 'Delete Post Success',
+                'data' => $posts
             ], 200);
         }
 
         return response([
-            'message' => 'Delete post Failed',
+            'message' => 'Delete Post Failed',
             'data' => null,
         ], 400);
     }
