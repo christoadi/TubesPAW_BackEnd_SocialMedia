@@ -22,7 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'gender',
-        'tanggalLahir',
+        'dateborn',
         'email',
         'username',
         'password',
@@ -62,10 +62,4 @@ class User extends Authenticatable implements MustVerifyEmail
             return Carbon::parse($this->attributes['updated_at'])->format('Y-m-d H:i:s');
         }
     }
-
-    // public function getEmailVerifiedAtAttribute() {
-    //     if(!is_null($this->attributes['email_verified_at'])) {
-    //         return Carbon::parse($this->attributes['email_verified_at'])->format('Y-m-d H:i:s');
-    //     }
-    // }
 }
