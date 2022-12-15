@@ -54,7 +54,6 @@ Route::group(['middleware'=>'auth:api'],function() { //Routes yang bisa dijalank
     Route::put('post/{id}', 'Api\PostController@update');
 
 
-
     //comment routes
     Route::get('comment', 'Api\CommentController@index');
     Route::get('comment/{id}', 'Api\CommentController@show');
@@ -65,7 +64,11 @@ Route::group(['middleware'=>'auth:api'],function() { //Routes yang bisa dijalank
     Route::delete('comment/{id}', 'Api\CommentController@destroy');
     Route::delete('comment/post/{idPost}', 'Api\CommentController@destroyPost');
 
-
+    //feedback routes
+    Route::get('feedback/{id}', 'Api\FeedbackController@show');
+    Route::delete('feedback/{id}', 'Api\FeedbackController@destroy');
+    Route::post('feedback', 'Api\FeedbackController@store');
+    Route::put('feedback/{id}', 'Api\FeedbackController@update');
 
     //logout routes
     Route::get('logout','Api\AuthController@logout');

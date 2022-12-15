@@ -49,7 +49,7 @@ class AuthController extends Controller
         event(new Registered($user)); //Registering user
 
         return response([
-            'message' => 'Register Success',
+            'message' => 'Register Success, Please Verify Your Email First',
             'user' => $user
         ], 200); //return user data
     }
@@ -68,7 +68,7 @@ class AuthController extends Controller
         }    
 
         if (!Auth::attempt($loginData)){
-            return response(['message' => 'Invalid Credentials'], 401); //return validation if failed log in
+            return response(['message' => 'We couldnt find and account that matches what you entered'], 401); //return validation if failed log in
         }    
 
         /** @var \App\Models\User $user **/
@@ -76,7 +76,7 @@ class AuthController extends Controller
         if($user->email_verified_at != null){
             $token = $user->createToken('Authentication Token')->accessToken; //generate token
         }else{
-            return response(['message'=>'Email Not verified!'],401);
+            return response(['message'=>'Email is not verified!'],401);
         }    
         return response([
             'message' => 'Authenticated',
