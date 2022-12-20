@@ -38,12 +38,12 @@ Route::get('feedback/index', 'Api\FeedbackController@index');
 
 
 
-Route::group(['middleware'=>'auth:api'],function() { //Routes yang bisa dijalankan setelah login
+Route::group(['middleware' => 'auth:api'], function () { //Routes yang bisa dijalankan setelah login
     //routes untuk user
     Route::get('user', 'Api\AuthController@index');
-    Route::get('user/{id}','Api\AuthController@show');
-    Route::put('user/{id}','Api\AuthController@update');
-    Route::delete('user/{id}','Api\AuthController@destroy');
+    Route::get('user/{id}', 'Api\AuthController@show');
+    Route::put('user/{id}', 'Api\AuthController@update');
+    Route::delete('user/{id}', 'Api\AuthController@destroy');
 
     //posting routes
     Route::get('post/{id}', 'Api\PostController@show');
@@ -71,5 +71,5 @@ Route::group(['middleware'=>'auth:api'],function() { //Routes yang bisa dijalank
     Route::put('feedback/{id}', 'Api\FeedbackController@update');
 
     //logout routes
-    Route::get('logout','Api\AuthController@logout');
+    Route::get('logout', 'Api\AuthController@logout');
 });

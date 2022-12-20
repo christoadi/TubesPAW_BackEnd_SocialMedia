@@ -42,7 +42,7 @@ class AuthController extends Controller
 
         if ($validate->fails())
             return response(['message' => $validate->errors()], 400); //return validation if error in input
-
+        
         $registrationData['password'] = bcrypt($request->password); //encrypting password
         $user = User::create($registrationData); //creating user data
 
